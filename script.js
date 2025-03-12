@@ -1,7 +1,7 @@
 // Game state variables
 let secretNumber;
 let lowerBound = 0;
-let upperBound = 100;
+let upperBound = 100; // Default value, will be updated based on range selection
 let currentPlayerIndex = 0;
 let players = [];
 let round = 1;
@@ -12,7 +12,6 @@ let loserFound = false;
 let activeQuestionBank = 'built-in';
 let customQuestionBank = [];
 let canGuess = false; // New flag to track if guessing is allowed
-
 
 const builtInQuestions = [
     {
@@ -366,13 +365,12 @@ const builtInQuestions = [
         correctAnswer: "blushes"
     }
 ];
-
-
 // DOM elements
 const gameSetupEl = document.getElementById('game-setup');
 const gameAreaEl = document.getElementById('game-area');
 const gameOverEl = document.getElementById('game-over');
 const numPlayersInput = document.getElementById('num-players');
+const numberRangeInput = document.getElementById('number-range'); // New DOM element
 const startGameBtn = document.getElementById('start-game');
 const questionBankSelect = document.getElementById('question-bank-select');
 const customBankContainer = document.getElementById('custom-bank-container');
@@ -501,17 +499,19 @@ function startGame() {
         return;
     }
     
+    // Get selected number range
+    upperBound = parseInt(numberRangeInput.value);
+    
     // Initialize game state
     gameActive = true;
     lowerBound = 0;
-    upperBound = 100;
     currentPlayerIndex = 0;
     round = 1;
     loserFound = false;
     canGuess = false; // Reset the flag at the start of the game
     
-    // Generate secret number (1-99, excluding bounds)
-    secretNumber = Math.floor(Math.random() * 99) + 1;
+    // Generate secret number (1 to upperBound-1, excluding bounds)
+    secretNumber = Math.floor(Math.random() * (upperBound - 1)) + 1;
     console.log("Secret number: " + secretNumber); // For testing
     
     // Create players
@@ -770,7 +770,7 @@ function resetGame() {
     // Reset game state
     secretNumber = null;
     lowerBound = 0;
-    upperBound = 100;
+    upperBound = parseInt(numberRangeInput.value); // Use current selected range
     currentPlayerIndex = 0;
     players = [];
     round = 1;
